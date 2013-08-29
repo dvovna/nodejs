@@ -12,14 +12,14 @@ var refs = [""];
 
 //should return correct json
 function generate() {
-	return getRandomProjectName();
+	return getProjects();
 }
 
-function getProjects {
-	var projects [],
-		massSize= rand(100);
+function getProjects() {
+	var projects = [],
+		massSize = rand(10);
 
-	for(var i = 0, massSize, i++) {
+	for(var i = 0; massSize; i++) {
 		projects.push(getRandomProject());
 	}
 
@@ -27,7 +27,18 @@ function getProjects {
 }
 
 function getRandomProject() {
+	var project = {};
 
+	project["id"] = rand(100000);
+	project["name"] = getRandomProjectName();
+	project["companies"] = getCompaignsList();
+
+	return project;
+}
+
+//implementation...
+function getCompaignsList() {
+	return ["1"];
 }
 
 function getRandomProjectName() {

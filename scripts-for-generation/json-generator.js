@@ -1,66 +1,70 @@
-exports.generate = generate;
+exports.generateJSON = generateJSON;
 
-var projects = ["World of Tanks", "Umbrella", "Red Alert", "Gnom", "Placer", "UI", "Java"];
-var compainies = ["new arms", "new boobs", "new butt", "new backbone", "new lazer", "patch 100500"];
-var activities = ["link on bla.ru", "banner on tut.by", "banner on google.com", "icon on efinancialcareers.com", "", ""];
+var rand = Math.random;
+var floor = Math.floor;
 
-var areas = ["header on main form", "footer on main form", "left side", "right side"];
-var partners = ["hubabuba.org", "orbit.by", "google.com", "nodejs.org"];
+var projectsList = ["World of Tanks", "Umbrella", "Red Alert", "Gnom", "Placer", "UI", "Java"];
+var compainiesList = ["new arms", "new boobs", "new butt", "new backbone", "new lazer", "patch 100500"];
+var activitiesList = ["link on bla.ru", "banner on tut.by", "banner on google.com", "icon on efinancialcareers.com", "", ""];
+
+var areasList = ["header on main form", "footer on main form", "left side", "right side"];
+var partnersList = ["hubabuba.org", "orbit.by", "google.com", "nodejs.org"];
 
 var refs = [""];
 
 
 //should return correct json
-function generate(size) {
+function generateJSON (size) {
 	var json = [];
 
-	json.push({"projects": getProjects(size)});
+	json.push({"projects": getRandomArray(size, getRandomProject)});
+
+	json.push({"compaigns": getRandomArray((size-3), getRandomCompaign)});
 
 	json = JSON.stringify(json);
 
 	return json;
 }
-
-function getProjects(size) {
-	var projects = [];
-
+/**
+* creates array with randomly created objects
+* @size int - number of generated objects
+* @func function - returns random object
+**/
+function getRandomArray (size, func) {
+	var array = [];
 	for(var i = 0; i <= size; i++) {
-		projects.push(getRandomProject());
+		array.push(func());
 	}
-
-	return projects;
+	return array;
 }
 
-function getRandomProject() {
+function getRandomCompaign () {
+	var compaign = {};
+
+	compaign["id"] = floor((rand()*1000000) + 1);
+	compaign['name'] = getRandomValueFromArray(compainiesList);
+
+	return compaign;
+}
+//implemented
+function getRandomProject () {
 	var project = {};
 
 	project["id"] = floor((rand()*1000000) + 1);
-	project["name"] = getRandomProjectName();
-	project["compaigns"] = getCompaignsList();
+	project["name"] = getRandomValueFromArray(projectsList);
+	project["compaigns"] = getCompaignsIds();
 
 	return project;
 }
 
-//implementation...
-function getCompaignsList() {
-	var compaigns = [];
-
-	compaigns.push({"id": "1"});
-
-	return compaigns;
-}
-//implemented
-function getRandomProjectName() {
-	return projects[Math.floor(rand() * projects.length)];
+function getCompaignsIds () {
+	return ['1'];
 }
 
-
-
-function rand(length) {
-	var len = length || '';
-	return Math.random(len);
-}
-
-function floor(arg) {
-	return Math.floor(arg);
+/**
+* finds in array random value
+* @array []
+*/
+function getRandomValueFromArray (array) {
+	return array[floor(rand() * array.length)];
 }

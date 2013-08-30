@@ -3,4 +3,12 @@ var generator = require('./json-generator');
 
 var file = fs.openSync('scripts-for-generation/json-data.txt', 'w+');
 
-fs.writeSync(file, generator.generate());
+var projectsJSON = generator.generate(10);
+
+console.log('writing');
+
+console.log(projectsJSON);
+
+fs.writeSync(file, projectsJSON);
+
+console.log('done');

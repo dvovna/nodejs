@@ -11,15 +11,20 @@ var refs = [""];
 
 
 //should return correct json
-function generate() {
-	return getProjects();
+function generate(size) {
+	var json = [];
+
+	json.push({"projects": getProjects(size)});
+
+	json = JSON.stringify(json);
+
+	return json;
 }
 
-function getProjects() {
-	var projects = [],
-		massSize = rand(10);
+function getProjects(size) {
+	var projects = [];
 
-	for(var i = 0; massSize; i++) {
+	for(var i = 0; i <= size; i++) {
 		projects.push(getRandomProject());
 	}
 
@@ -29,34 +34,33 @@ function getProjects() {
 function getRandomProject() {
 	var project = {};
 
-	project["id"] = rand(100000);
+	project["id"] = floor((rand()*1000000) + 1);
 	project["name"] = getRandomProjectName();
-	project["companies"] = getCompaignsList();
+	project["compaigns"] = getCompaignsList();
 
 	return project;
 }
 
 //implementation...
 function getCompaignsList() {
-	return ["1"];
-}
+	var compaigns = [];
 
+	compaigns.push({"id": "1"});
+
+	return compaigns;
+}
+//implemented
 function getRandomProjectName() {
 	return projects[Math.floor(rand() * projects.length)];
 }
 
 
 
-
-
-
-
-
-
-
-
-
 function rand(length) {
 	var len = length || '';
 	return Math.random(len);
+}
+
+function floor(arg) {
+	return Math.floor(arg);
 }

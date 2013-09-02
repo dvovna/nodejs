@@ -17,7 +17,8 @@ var json = [];
 
 //main function
 function generateJSON (size) {
-	json.push({"activities": getRandomArray((size+20), getRandomActoivity)})
+	json.push({"refs": getRandomArray((size+30), getRandomRef)})
+	json.push({"activities": getRandomArray((size+20), getRandomActivity)});
 	json.push({"compaigns": getRandomArray((size+10), getRandomCompaign)});
 	json.push({"projects": getRandomArray(size, getRandomProject)});
 
@@ -43,7 +44,7 @@ function getRandomCompaign () {
 
 	compaign["id"] = floor((rand()*1000000) + 1);
 	compaign["name"] = getRandomValueFromArray(compaignsList);
-	compaign["activitiesIds"] = getIdsMass('activities', 12, 1);
+	compaign["activityIds"] = getIdsMass('activities', 12, 1);
 
 	return compaign;
 }
@@ -53,11 +54,11 @@ function getRandomProject () {
 
 	project["id"] = floor((rand()*1000000) + 1);
 	project["name"] = getRandomValueFromArray(projectsList);
-	project["compaignsIds"] = getIdsMass('compaigns', 7, 3);
+	project["compaignIds"] = getIdsMass('compaigns', 7, 3);
 
 	return project;
 }
-function getRandomActoivity () {
+function getRandomActivity () {
 	var activity = {},
 		date = new Date();
 
@@ -65,9 +66,20 @@ function getRandomActoivity () {
 	activity["name"] = getRandomValueFromArray(activitiesList);
 	activity["start"] = new Date(date.getTime() - randRange(10000000000, 10000000));
 	activity["end"] = new Date(date.getTime() + randRange(1000000, 100000));
+	activity["refIds"] = getIdsMass('refs', 30, 5);
 
 	return activity;
 }
+
+function getRandomRef () {
+	var ref = {};
+
+	ref["id"] = floor((rand()*1000000) + 1);
+
+	return ref;
+}
+
+
 // should return array with actual ids for json's obj
 function getIdsMass (key, max, min) {
 	var ids = [],
@@ -85,26 +97,10 @@ function getIdsMass (key, max, min) {
 * @array []
 */
 function getRandomValueFromArray (array, key) {
-	var placeNumber = floor(rand() * array.length),
-		key = key ? key : false;
+	var placeNumber = floor(rand() * array.length);
 
 	return key ? array[placeNumber][key] : array[placeNumber];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //returns object by field
 function find (array, key) {

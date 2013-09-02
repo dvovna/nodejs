@@ -3,7 +3,7 @@ var generator = require('./json-generator');
 
 var file = fs.openSync('scripts-for-generation/json-data.txt', 'w+');
 
-var projectsJSON = generator.generateJSON(10);
+var projectsJSON = generator.generateJSON(5);
 
 console.log('----------writing----------\n');
 

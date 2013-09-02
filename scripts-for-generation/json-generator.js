@@ -58,10 +58,13 @@ function getRandomProject () {
 	return project;
 }
 function getRandomActoivity () {
-	var activity = {};
+	var activity = {},
+		date = new Date();
 
 	activity["id"] = floor((rand()*1000000) + 1);
 	activity["name"] = getRandomValueFromArray(activitiesList);
+	activity["start"] = new Date(date.getTime() - randRange(10000000000, 10000000));
+	activity["end"] = new Date(date.getTime() + randRange(1000000, 100000));
 
 	return activity;
 }
@@ -69,7 +72,7 @@ function getRandomActoivity () {
 function getIdsMass (key, max, min) {
 	var ids = [],
 		mass = find(json, key);
-		count = (Math.floor(Math.random() * (max - min + 1)) + min); //from 3 to 7 random value
+		count = randRange(max, min); //from 3 to 7 random value
 
 	for (var i = 0; i <= count; i++) {
 		ids.push(getRandomValueFromArray(mass, "id"));
@@ -110,4 +113,8 @@ function find (array, key) {
             return array[i][key];
         }
 	}
+}
+
+function randRange (max, min) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }

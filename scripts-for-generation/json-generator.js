@@ -17,7 +17,10 @@ var json = [];
 
 //main function
 function generateJSON (size) {
-	json.push({"refs": getRandomArray((size+30), getRandomRef)})
+	json.push({"refs": getRandomArray((size+30), getRandomRef)});
+
+	json.push({"areas": getRandomArray((size+23), getRandomArea)});
+	json.push({"partners": getRandomArray((size-2), getRandomPartner)});
 	json.push({"activities": getRandomArray((size+20), getRandomActivity)});
 	json.push({"compaigns": getRandomArray((size+10), getRandomCompaign)});
 	json.push({"projects": getRandomArray(size, getRandomProject)});
@@ -77,6 +80,26 @@ function getRandomRef () {
 	ref["id"] = floor((rand()*1000000) + 1);
 
 	return ref;
+}
+
+function getRandomArea () {
+	var area = {};
+
+	area["id"] = floor((rand()*1000000) + 1);
+	area["name"] = getRandomValueFromArray(areasList);
+	area["refIds"] = getIdsMass("refs", 20, 5);
+
+	return area;
+}
+
+function getRandomPartner () {
+	var partner = {};
+
+	partner['id'] = floor((rand()*1000000) + 1);
+	partner['name'] = getRandomValueFromArray(partnersList);
+	partner['areaIds'] = getIdsMass("areas", 27, 1);
+
+	return partner;	
 }
 
 

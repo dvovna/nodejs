@@ -5,7 +5,7 @@ var floor = Math.floor;
 
 var projectsList = ["World of Tanks", "Umbrella", "Red Alert", "Gnom", "Placer", "UI", "Java"];
 var compaignsList = ["new arms", "new boobs", "new butt", "new backbone", "new lazer", "patch 100500"];
-var activitiesList = ["link on bla.ru", "banner on tut.by", "banner on google.com", "icon on efinancialcareers.com", "", ""];
+var activitiesList = ["link on bla.ru", "banner on tut.by", "banner on google.com", "icon on efinancialcareers.com", "opaopa", "lolaloa"];
 
 var areasList = ["header on main form", "footer on main form", "left side", "right side"];
 var partnersList = ["hubabuba.org", "orbit.by", "google.com", "nodejs.org"];
@@ -17,6 +17,7 @@ var json = [];
 
 //main function
 function generateJSON (size) {
+	json.push({"activities": getRandomArray((size+20), getRandomActoivity)})
 	json.push({"compaigns": getRandomArray((size+10), getRandomCompaign)});
 	json.push({"projects": getRandomArray(size, getRandomProject)});
 
@@ -42,6 +43,7 @@ function getRandomCompaign () {
 
 	compaign["id"] = floor((rand()*1000000) + 1);
 	compaign["name"] = getRandomValueFromArray(compaignsList);
+	compaign["activitiesIds"] = getIdsMass('activities', 12, 1);
 
 	return compaign;
 }
@@ -51,21 +53,29 @@ function getRandomProject () {
 
 	project["id"] = floor((rand()*1000000) + 1);
 	project["name"] = getRandomValueFromArray(projectsList);
-	project["compaignsIds"] = getCompaignsIds();
+	project["compaignsIds"] = getIdsMass('compaigns', 7, 3);
 
 	return project;
 }
-// should return array with actual ids of compaigns
-function getCompaignsIds () {
-	var mass = [],
-		compaignsMass = find(json, 'compaigns');
-		count = (Math.floor(Math.random() * (7 - 3 + 1)) + 3); //from 3 to 7 random value
+function getRandomActoivity () {
+	var activity = {};
+
+	activity["id"] = floor((rand()*1000000) + 1);
+	activity["name"] = getRandomValueFromArray(activitiesList);
+
+	return activity;
+}
+// should return array with actual ids for json's obj
+function getIdsMass (key, max, min) {
+	var ids = [],
+		mass = find(json, key);
+		count = (Math.floor(Math.random() * (max - min + 1)) + min); //from 3 to 7 random value
 
 	for (var i = 0; i <= count; i++) {
-		mass.push(getRandomValueFromArray(compaignsMass, "id"));
+		ids.push(getRandomValueFromArray(mass, "id"));
 	}
 
-	return mass;
+	return ids;
 }
 /**
 * finds in array random value
@@ -73,10 +83,21 @@ function getCompaignsIds () {
 */
 function getRandomValueFromArray (array, key) {
 	var placeNumber = floor(rand() * array.length),
-		key = key ? key : false;		
+		key = key ? key : false;
 
 	return key ? array[placeNumber][key] : array[placeNumber];
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -90,8 +111,3 @@ function find (array, key) {
         }
 	}
 }
-
-
-
-
-// generateJSON(5);

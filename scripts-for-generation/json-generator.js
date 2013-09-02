@@ -20,7 +20,7 @@ function generateJSON (size) {
 	json.push({"refs": getRandomArray((size+30), getRandomRef)});
 
 	json.push({"areas": getRandomArray((size+23), getRandomArea)});
-	json.push({"partners": getRandomArray((size-2), getRandomPartner)});
+	json.push({"partners": getRandomArray(3, getRandomPartner)});
 	json.push({"activities": getRandomArray((size+20), getRandomActivity)});
 	json.push({"compaigns": getRandomArray((size+10), getRandomCompaign)});
 	json.push({"projects": getRandomArray(size, getRandomProject)});
@@ -36,8 +36,8 @@ function generateJSON (size) {
 **/
 function getRandomArray (size, func) {
 	var arr = [];
-	for(var i = 0; i <= size; i++) {
-		arr.push(func());
+	for(var i = 0; i < size; i++) {
+		arr.push(func(i));
 	}
 	return arr;
 }
@@ -97,11 +97,37 @@ function getRandomPartner () {
 
 	partner['id'] = floor((rand()*1000000) + 1);
 	partner['name'] = getRandomValueFromArray(partnersList);
-	partner['areaIds'] = getIdsMass("areas", 27, 1);
+	partner['areaIds'] = getAreasIds();
 
 	return partner;	
 }
+//простите за это, итак много времени убил...
+var areasCount = 10;
+var cycleNumber = 1;
+var startPos = 0;
+function getAreasIds (i) {
+	var areaIds = [],
+		areas = find(json, "areas"),
+		count = randRange(areasCount, 3);
 
+	areasCount -= count;
+
+	if (cycleNumber<3) {
+		areas = areas.splice(startPos, count);
+		startPos = count;
+	} else {
+		areas = areas.splice(startPos, areas.length);
+	}
+
+
+	for(var area in areas) {
+		areaIds.push(areas[area]["id"]);
+	}
+
+	cycleNumber++;
+
+	return areaIds;
+}
 
 // should return array with actual ids for json's obj
 function getIdsMass (key, max, min) {

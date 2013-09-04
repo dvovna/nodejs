@@ -1,0 +1,5 @@
+{
+    "cmd": ["C:\\Program Files\\nodejs\\node.exe", "$file", "$file_base_name"],
+    "working_dir": "${project_path:${folder}}",
+    "selector": "*.js"
+}

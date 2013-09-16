@@ -25,6 +25,8 @@ function generateJSON (size) {
 	json.push({"compaigns": getRandomArray((size+10), getRandomCompaign)});
 	json.push({"projects": getRandomArray(size, getRandomProject)});
 
+	addTestData(json);
+
 	json = JSON.stringify(json);
 
 	return json;
@@ -136,7 +138,12 @@ function getIdsMass (key, max, min) {
 		count = randRange(max, min); //from 3 to 7 random value
 
 	for (var i = 0; i <= count; i++) {
-		ids.push(getRandomValueFromArray(mass, "id"));
+		var id = getRandomValueFromArray(mass, "id");
+		if (ids.indexOf(id) == -1) { 
+			ids.push(id);
+		} else {
+			i+=1;
+		}
 	}
 
 	return ids;
@@ -158,8 +165,51 @@ function find (array, key) {
             return array[i][key];
         }
 	}
+	return false;
 }
 
 function randRange (max, min) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+/*
+* should append to each ref corect data
+*/
+function addTestData (data) {
+	var activities = find(data, 'activities'),
+		oneDay = 24*60*60*1000;
+
+	for (var activity in activities) {
+		var startDate = activities[activity].start,
+			endDate = activities[activity].end,
+			refIds = activities[activity].refIds,
+			activityId = activities[activity].id;
+
+		for (var refId in refIds) {
+			var days = Math.round(Math.abs((endDate - startDate)/(oneDay)));;
+			for(var i=1; i <= days; i++) {
+				var date = startDate.getTime() + i*oneDay;
+				addDataToRef(refIds[refId], date, activityId);
+			}
+		}
+	}
+}
+//should find correct ref and add to it correct data
+function addDataToRef (refId, date, activityId) {
+	var refs = find(json, 'refs'),
+		refIndex;
+
+	for (refIndex in refs) {
+		if (refs[refIndex].id == refId) { break; }
+	}
+
+	refs[refIndex].date = date;
+	refs[refIndex].activityId = activityId;
+	refs[refIndex].clicked = 123;
+	refs[refIndex].registrations = 666;
+	refs[refIndex].enters = 100;
+	refs[refIndex].againEnters = 20;
+	refs[refIndex].paymentsCount = 10;
+}
+
+// generateJSON(5);
